@@ -1,0 +1,37 @@
+
+{
+    "TARGET":
+    {
+        "HOST":   "localhost",
+        "PORT":   5050,
+        "SECURE": false,
+        "PATH":   ""
+    },
+    
+    "PROXY":
+    {
+        "PORT": 9999
+    },
+    
+    "TRANSLATION":
+    {
+        "INGOING":
+        [
+            {
+                "FROM": "pippo",
+                "TO":   "paperino"
+            }
+        ],
+        
+        "OUTGOING":
+        [],
+        
+        "REPLACE_RULES":
+        [
+            {
+                "FROM": ".",
+                "TO":   "_"
+            }
+        ]
+    }
+}
