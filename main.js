@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 
 'use strict';
 
@@ -18,4 +18,4 @@ var log = new Logger(
     ]
 });
 
-progenic.run('gate', 'lib/gate', 1, true, log);
+progenic.run('gate', 'lib/gate', 1, false, log);
