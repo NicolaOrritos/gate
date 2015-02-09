@@ -13,13 +13,22 @@ Translating Reverse Proxy
 ## Install
 
 ```sh
-$ npm install --save node-gate
+$ sudo npm install -g node-gate
 ```
 
 
-## Usage
+## Configure
 
 _(Coming soon...)_
+
+
+## Run
+
+Copy configuration file to `/etc/gate.json` and then:
+
+```sh
+$ sudo gate
+```
 
 
 ## License
