@@ -24,7 +24,7 @@ _(Coming soon...)_
 
 ## Run
 
-Copy configuration file to `/etc/gate.json` and then:
+Copy configuration file to `/etc/gate.conf` and then:
 
 ```sh
 $ sudo gate
