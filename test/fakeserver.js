@@ -6,12 +6,16 @@ var http = require('http');
 
 var server = http.createServer(function(req, res)
 {
-    console.log('Got request for URL %s', req.url);
+    console.log('Got request for URL "%s"', req.url);
     
-    // Save to file so that tests can verify it:
-    
-    
-    res.end('OK');
+    if (req.url !== '/favicon.ico')
+    {
+        // Save to file so that tests can verify it:
+        fs.writeFile('path.txt', req.url, function()
+        {
+            res.end('OK');
+        });
+    }
 });
 
 server.listen(5050, function()
