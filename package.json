@@ -1,6 +1,6 @@
 {
   "name": "node-gate",
-  "version": "1.1.0",
+  "version": "1.1.2",
   "description": "Translating Reverse Proxy",
   "homepage": "http://github.com/NicolaOrritos/gate",
   "author": {
@@ -18,12 +18,12 @@
   ],
   "bin": "main.js",
   "dependencies": {
-    "bluebird": "^2.9.6",
+    "bluebird": "^2.9.7",
     "bunyan": "^1.3.3",
     "http-proxy": "^1.8.1",
     "pathrewrite": "^0.8.0",
-    "progenic": "^0.9.6",
-    "sjl": "^1.1.0"
+    "progenic": "^0.9.8",
+    "sjl": "^0.4.0"
   },
   "devDependencies": {
     "grunt-cli": "^0.1.13",
