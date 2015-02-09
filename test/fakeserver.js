@@ -11,7 +11,7 @@ var server = http.createServer(function(req, res)
     if (req.url !== '/favicon.ico')
     {
         // Save to file so that tests can verify it:
-        fs.writeFile('path.txt', req.url, function()
+        fs.writeFile('test/path.txt', req.url, function()
         {
             res.end('OK');
         });

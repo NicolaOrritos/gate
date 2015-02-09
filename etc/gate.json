@@ -1,16 +1,18 @@
 
 {
-    "TARGET":
-    {
-        "HOST":   "localhost",
-        "PORT":   5050,
-        "SECURE": false,
-        "PATH":   ""
-    },
-    
     "PROXY":
     {
         "PORT": 9999
+    },
+    
+    "TARGETS":
+    {
+        "/subpath1":
+        {
+            "HOST":   "localhost",
+            "PORT":   5050,
+            "SECURE": false
+        }
     },
     
     "TRANSLATION":
@@ -18,8 +20,8 @@
         "INGOING":
         [
             {
-                "FROM": "pippo",
-                "TO":   "paperino"
+                "FROM": "subpathXYZ",
+                "TO":   "ZYXsubpath"
             }
         ],
         
