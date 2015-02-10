@@ -211,6 +211,42 @@ describe('"gate" proxy server', function()
 
         done();
     });
+    
+    
+////////////////////////////////////////////////////////////////////////////////////////////
+    
+    it('must switch configuration to root-path', function(done)
+    {
+        // 1. DO NOT start target fake server
+
+        // 2. Start gate proxy
+        proxy = cp.fork('lib/gate.js', {detached: true});
+
+        // 3. Wait services before starting tests
+        setTimeout(function()
+        {
+            done();
+
+        }, 500);
+    });
+    
+    
+    it('must answer to my calls with a 404', function(done)
+    {
+        request.get('http://localhost:9999/subpath1/proxy/are/you/there?', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 404);
+            
+            request.get('http://localhost:9999/', function(err, res)
+            {
+                assert(err == null, 'There was an error connecting to the proxy. ' + err);
+                assert(res.statusCode === 404);
+
+                done();
+            });
+        });
+    });
 });
 
 

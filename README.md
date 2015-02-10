@@ -27,7 +27,7 @@ _(Coming soon...)_
 Copy configuration file to `/etc/gate.conf` and then:
 
 ```sh
-$ sudo gate
+$ sudo node-gate
 ```
 
 
