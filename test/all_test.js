@@ -67,7 +67,7 @@ describe('"gate" proxy server', function()
     
     it('must substitute characters in paths', function(done)
     {
-        request.get('http://localhost:9999/subpath1/points.must.become.underscores/', function(err, res)
+        request.get('http://localhost:9999/subpath1/firstParam/points.must.become.underscores/', function(err, res)
         {
             assert(err == null, 'There was an error connecting to the proxy. ' + err);
             assert(res.statusCode === 200);
@@ -76,7 +76,7 @@ describe('"gate" proxy server', function()
             fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
             {
                 assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
-                assert(data === '/points_must_become_underscores/');
+                assert(data === '/firstParam/points_must_become_underscores/');
                 
                 done();
             });
@@ -84,6 +84,24 @@ describe('"gate" proxy server', function()
     });
     
     it('must substitute subpaths, depending on the rules, and characters too', function(done)
+    {
+        request.get('http://localhost:9999/subpath1/firstParam/points...to...underscores/subpathXYZ', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 200);
+            assert(res.body === 'OK');
+            
+            fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
+            {
+                assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
+                assert(data === '/firstParam/points___to___underscores/ZYXsubpath');
+                
+                done();
+            });
+        });
+    });
+    
+    it('must NOT substitute subpaths and characters when the clause "ONLY_APPLY_TO" states so', function(done)
     {
         request.get('http://localhost:9999/subpath1/points...to...underscores/subpathXYZ', function(err, res)
         {
@@ -94,7 +112,7 @@ describe('"gate" proxy server', function()
             fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
             {
                 assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
-                assert(data === '/points___to___underscores/ZYXsubpath');
+                assert(data === '/points...to...underscores/ZYXsubpath');
                 
                 done();
             });
@@ -166,7 +184,7 @@ describe('"gate" proxy server', function()
     
     it('must substitute characters in paths [root-path]', function(done)
     {
-        request.get('http://localhost:9999/subpath1/points.must.become.underscores/', function(err, res)
+        request.get('http://localhost:9999/subpath1/subpath2/points.must.become.underscores/', function(err, res)
         {
             assert(err == null, 'There was an error connecting to the proxy. ' + err);
             assert(res.statusCode === 200);
@@ -175,7 +193,7 @@ describe('"gate" proxy server', function()
             fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
             {
                 assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
-                assert(data === '/subpath1/points_must_become_underscores/');
+                assert(data === '/subpath1/subpath2/points_must_become_underscores/');
                 
                 done();
             });
@@ -184,7 +202,7 @@ describe('"gate" proxy server', function()
     
     it('must substitute subpaths, depending on the rules, and characters too [root-path]', function(done)
     {
-        request.get('http://localhost:9999/subpath1/points...to...underscores/subpathXYZ', function(err, res)
+        request.get('http://localhost:9999/subpath1/subpath2/points...to...underscores/subpathXYZ', function(err, res)
         {
             assert(err == null, 'There was an error connecting to the proxy. ' + err);
             assert(res.statusCode === 200);
@@ -193,7 +211,25 @@ describe('"gate" proxy server', function()
             fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
             {
                 assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
-                assert(data === '/subpath1/points___to___underscores/ZYXsubpath');
+                assert(data === '/subpath1/subpath2/points___to___underscores/ZYXsubpath');
+                
+                done();
+            });
+        });
+    });
+    
+    it('must NOT substitute subpaths and characters when the clause "ONLY_APPLY_TO" states so [root-path]', function(done)
+    {
+        request.get('http://localhost:9999/points...to...underscores/subpathXYZ', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 200);
+            assert(res.body === 'OK');
+            
+            fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
+            {
+                assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
+                assert(data === '/points...to...underscores/ZYXsubpath');
                 
                 done();
             });

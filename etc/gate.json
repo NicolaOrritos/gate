@@ -23,8 +23,9 @@
                 "REPLACE_RULES":
                 [
                     {
-                        "FROM": ".",
-                        "TO":   "_"
+                        "FROM":          ".",
+                        "TO":            "_",
+                        "ONLY_APPLY_TO": "%2"
                     }
                 ]
             }
