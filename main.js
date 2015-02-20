@@ -18,4 +18,4 @@ var log = new Logger(
     ]
 });
 
-progenic.run('gate', 'lib/gate', 1, false, log);
+progenic.run('gate', 'lib/gate', 1, true, log);
