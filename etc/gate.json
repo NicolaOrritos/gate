@@ -5,7 +5,16 @@
         "PORT": 9999
     },
     
-    "TARGETS":
+    "PIPELINE":
+    {
+        "PATH": "etc/pipelines.d/p1",
+        "STEPS":
+        [
+            "step1"
+        ]
+    }
+    
+    /* "TARGETS":
     {
         "/":
         {
@@ -58,5 +67,5 @@
                 ]
             }
         }
-    }
+    } */
 }

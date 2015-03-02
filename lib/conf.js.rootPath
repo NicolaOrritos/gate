@@ -2,7 +2,7 @@
 
 
 var sjl = require("sjl");
-var P   = global.Promise || require('bluebird');
+var P   = require('bluebird');
 
 var defaults =
 {
@@ -11,7 +11,16 @@ var defaults =
         "PORT": 9999
     },
     
-    "TARGETS":
+    "PIPELINE":
+    {
+        "PATH": "etc/pipelines.d/p1",
+        "STEPS":
+        [
+            "step1"
+        ]
+    }
+    
+    /* "TARGETS":
     {
         "/":
         {
@@ -69,7 +78,7 @@ var defaults =
                 ]
             }
         }
-    }
+    } */
 };
 
 module.exports =
