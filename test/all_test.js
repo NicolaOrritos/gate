@@ -128,8 +128,8 @@ describe('"gate" proxy server', function()
         proxy.kill();
         
         // 0. For these particular tests we should enable a particular configuration:
-        fs.renameSync('lib/conf.js', 'lib/conf.js.noRootPath');
-        fs.renameSync('lib/conf.js.rootPath', 'lib/conf.js');
+        fs.renameSync('etc/pipelines.d/default/pipeline.conf', 'etc/pipelines.d/default/pipeline.conf.norootpath');
+        fs.renameSync('etc/pipelines.d/default/pipeline.conf.rootpath', 'etc/pipelines.d/default/pipeline.conf');
 
         // 1. Start target fake server
         fake = cp.fork('test/fakeserver.js', {detached: true});
@@ -242,8 +242,8 @@ describe('"gate" proxy server', function()
         proxy.kill();
 
         // 6. Re-enable the old configuration:
-        fs.renameSync('lib/conf.js', 'lib/conf.js.rootPath');
-        fs.renameSync('lib/conf.js.noRootPath', 'lib/conf.js');
+        fs.renameSync('etc/pipelines.d/default/pipeline.conf', 'etc/pipelines.d/default/pipeline.conf.rootpath');
+        fs.renameSync('etc/pipelines.d/default/pipeline.conf.norootpath', 'etc/pipelines.d/default/pipeline.conf');
 
         done();
     });

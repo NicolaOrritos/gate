@@ -1,0 +1,81 @@
+
+{
+    "step1":
+    {
+        "TARGETS":
+        {
+            "/":
+            {
+                "HOST":   "localhost",
+                "PORT":   5050,
+                "SECURE": false
+            },
+            
+            "/subpath1":
+            {
+                "HOST":   "localhost",
+                "PORT":   5050,
+                "SECURE": false
+            }
+        }
+    },
+    
+    
+    "step2":
+    {
+        "TARGETS":
+        {
+            "/":
+            {
+                "TRANSLATION":
+                {
+                    "INGOING":
+                    [
+                        {
+                            "FROM": "subpathXYZ",
+                            "TO":   "ZYXsubpath"
+                        }
+                    ],
+
+                    "OUTGOING":
+                    [],
+
+                    "REPLACE_RULES":
+                    [
+                        {
+                            "FROM":          ".",
+                            "TO":            "_",
+                            "ONLY_APPLY_TO": "%3"
+                        }
+                    ]
+                }
+            },
+
+            "/subpath1":
+            {
+                "TRANSLATION":
+                {
+                    "INGOING":
+                    [
+                        {
+                            "FROM": "subpathXYZ",
+                            "TO":   "ZYXsubpath"
+                        }
+                    ],
+
+                    "OUTGOING":
+                    [],
+
+                    "REPLACE_RULES":
+                    [
+                        {
+                            "FROM":          ".",
+                            "TO":            "_",
+                            "ONLY_APPLY_TO": "%2"
+                        }
+                    ]
+                }
+            }
+        }
+    }    
+}
