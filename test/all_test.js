@@ -283,6 +283,79 @@ describe('"gate" proxy server', function()
             });
         });
     });
+    
+////////////////////////////////////////////////////////////////////////////////////////////
+    
+    it('must switch configuration to simple', function(done)
+    {
+        fake.kill();
+        proxy.kill();
+        
+        // 0. For these particular tests we should enable a particular configuration:
+        fs.renameSync('etc/pipelines.d/default', 'etc/pipelines.d/default.real');
+        fs.renameSync('etc/pipelines.d/simple', 'etc/pipelines.d/default');
+
+        // 1. Start target fake server
+        fake = cp.fork('test/fakeserver.js', {detached: true});
+
+        // 2. Start gate proxy
+        proxy = cp.fork('lib/gate.js', {detached: true});
+
+        // 3. Wait services before starting tests
+        setTimeout(function()
+        {
+            done();
+
+        }, 500);
+    });
+    
+    it('must answer to my calls [simple]', function(done)
+    {
+        request.get('http://localhost:9999/subpath1/proxy/are/you/there?', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 200);
+            assert(res.body === 'OK');
+            
+            fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
+            {
+                assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
+                assert(data === '/proxy/are/you/there?');
+                
+                request.get('http://localhost:9999/proxy/are/you/there?', function(err3, res3)
+                {
+                    assert(err3 == null, 'There was an error connecting to the proxy. ' + err3);
+                    assert(res3.statusCode === 404);
+                    assert(res3.body !== 'OK');
+
+                    done();
+                });
+            });
+        });
+    });
+    
+    it('must switch configuration back to default [simple]', function(done)
+    {
+        fake.kill();
+        proxy.kill();
+        
+        // 0. For these particular tests we should enable a particular configuration:
+        fs.renameSync('etc/pipelines.d/default', 'etc/pipelines.d/simple');
+        fs.renameSync('etc/pipelines.d/default.real', 'etc/pipelines.d/default');
+
+        // 1. Start target fake server
+        fake = cp.fork('test/fakeserver.js', {detached: true});
+
+        // 2. Start gate proxy
+        proxy = cp.fork('lib/gate.js', {detached: true});
+
+        // 3. Wait services before starting tests
+        setTimeout(function()
+        {
+            done();
+
+        }, 500);
+    });
 });
 
 
