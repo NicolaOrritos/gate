@@ -334,6 +334,37 @@ describe('"gate" proxy server', function()
         });
     });
     
+    it('must substitute subpaths, depending on the rules [simple]', function(done)
+    {
+        request.get('http://localhost:9999/subpath1/firstParam/subpathXYZ', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 200);
+            assert(res.body === 'OK');
+            
+            fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err2, data)
+            {
+                assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err2);
+                assert(data === '/firstParam/ZYXsubpath');
+                
+                request.get('http://localhost:9999/subpath1/firstParam', function(err2, res2)
+                {
+                    assert(err2 == null, 'There was an error connecting to the proxy. ' + err2);
+                    assert(res2.statusCode === 200);
+                    assert(res2.body === 'OK');
+
+                    fs.readFile('test/path.txt', {encoding: 'utf8'}, function(err3, data2)
+                    {
+                        assert(err2 == null, 'There was an error veryfing proxy\'s work. ' + err3);
+                        assert(data2 === '/firstParam');
+
+                        done();
+                    });
+                });
+            });
+        });
+    });
+    
     it('must switch configuration back to default [simple]', function(done)
     {
         fake.kill();
