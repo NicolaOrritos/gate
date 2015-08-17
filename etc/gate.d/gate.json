@@ -7,7 +7,7 @@
 
     "PIPELINE":
     {
-        "PATH": "/etc/gate.d/default",
+        "PATH": "etc/gate.d/default",
         "STEPS":
         [
             "$BUILTINS/redirection",

@@ -1,0 +1,81 @@
+
+{
+    "redirection":
+    {
+        "TARGETS":
+        {
+            "/":
+            {
+                "HOST":   "localhost",
+                "PORT":   5050,
+                "SECURE": false
+            },
+
+            "/subpath1":
+            {
+                "HOST":   "localhost",
+                "PORT":   5050,
+                "SECURE": false
+            }
+        }
+    },
+
+
+    "substitution":
+    {
+        "TARGETS":
+        {
+            "/":
+            {
+                "TRANSLATION":
+                {
+                    "INGOING":
+                    [
+                        {
+                            "FROM": "subpathXYZ",
+                            "TO":   "ZYXsubpath"
+                        }
+                    ],
+
+                    "OUTGOING":
+                    [],
+
+                    "REPLACE_RULES":
+                    [
+                        {
+                            "FROM":          ".",
+                            "TO":            "_",
+                            "ONLY_APPLY_TO": "%3"
+                        }
+                    ]
+                }
+            },
+
+            "/subpath1":
+            {
+                "TRANSLATION":
+                {
+                    "INGOING":
+                    [
+                        {
+                            "FROM": "subpathXYZ",
+                            "TO":   "ZYXsubpath"
+                        }
+                    ],
+
+                    "OUTGOING":
+                    [],
+
+                    "REPLACE_RULES":
+                    [
+                        {
+                            "FROM":          ".",
+                            "TO":            "_",
+                            "ONLY_APPLY_TO": "%2"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
