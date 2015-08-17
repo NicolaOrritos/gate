@@ -25,6 +25,7 @@
     "http-proxy": "^1.8.1",
     "pathrewrite": "^0.8.0",
     "progenic": "^1.0.0",
+    "prometheus-client": "^0.1.0",
     "sjl": "^1.1.0"
   },
   "devDependencies": {
