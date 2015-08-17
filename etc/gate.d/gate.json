@@ -4,14 +4,14 @@
     {
         "PORT": 9999
     },
-    
+
     "PIPELINE":
     {
-        "PATH": "etc/pipelines.d/default",
+        "PATH": "/etc/gate.d/default",
         "STEPS":
         [
-            "step1",
-            "step2"
+            "$BUILTINS/redirection",
+            "$BUILTINS/substitution"
         ]
     }
 }
