@@ -11,7 +11,8 @@
         "STEPS":
         [
             "$BUILTINS/redirection",
-            "$BUILTINS/substitution"
+            "$BUILTINS/substitution",
+            "$BUILTINS/track"
         ]
     }
 }
