@@ -12,6 +12,7 @@
         [
             "$BUILTINS/redirection",
             "$BUILTINS/substitution",
+            "$BUILTINS/local",
             "$BUILTINS/track"
         ]
     }

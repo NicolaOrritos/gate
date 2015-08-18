@@ -77,5 +77,31 @@
                 }
             }
         }
+    },
+
+    "local":
+    {
+        "TARGETS":
+        {
+            "/subpath2":
+            {
+                "FOLDER":   "test/resources"
+            }
+        },
+
+        "ERRORS":
+        {
+            "TOLERANT": true
+        }
+    },
+
+    "track":
+    {
+        "METRICS_PORT": 9090,
+
+        "ERRORS":
+        {
+            "TOLERANT": true
+        }
     }
 }
