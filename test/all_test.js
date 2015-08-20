@@ -469,8 +469,111 @@ describe('"gate" proxy server, with just the "local" stage loaded,', function()
 });
 
 
+describe('"gate" proxy server, with just the "track" stage loaded,', function()
+{
+    before(function(done)
+    {
+        // 0. For these particular tests we should enable a particular configuration:
+        fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.allstages');
+        fs.renameSync('./etc/gate.d/gate.json.track', './etc/gate.d/gate.json');
 
-describe('"gate" proxy server, all stages enabled', function()
+        // 1. Start target fake server
+        fake = cp.fork('test/fakeserver.js', {silent: true})
+        .once('message', function(msg)
+        {
+            if (msg.started)
+            {
+                // 2. Start gate proxy
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
+                .once('message', function(msg)
+                {
+                    if (msg.started)
+                    {
+                        // 3. Wait services to be up and running before starting tests
+                        done();
+                    }
+                    else
+                    {
+                        throw new Error('Could not start gate server');
+                    }
+                });
+            }
+            else
+            {
+                throw new Error('Could not start fake server');
+            }
+        });
+    });
+
+
+    var subpath = '/subpath2/I_m_not_here';
+
+    it('must return 404 when paths aren\'t found', function(done)
+    {
+        request.get('http://localhost:9999' + subpath, function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 404);
+
+            done();
+        });
+    });
+
+    it('requests must appear at the "metrics" URL', function(done)
+    {
+        var sjl = require('sjl');
+
+        sjl('etc/gate.d/default/pipeline.conf', {}, {silent: true})
+        .then(function(conf)
+        {
+            if (conf && conf.track && conf.track.METRICS_PORT)
+            {
+                var port = conf.track.METRICS_PORT;
+
+                request.get('http://localhost:' + port + '/metrics', function(err, res)
+                {
+                    assert(err == null, 'There was an error connecting to the metrics endpoint. ' + err);
+                    assert(res.statusCode === 200, 'Status code was: ' + res.statusCode);
+                    assert(res.body);
+
+                    assert(res.body.indexOf('requests_URLs{url="' + subpath + '"} 1') !== -1);
+                    assert(res.body.indexOf('requests_targets{target="undefined"} 1') !== -1);
+                    assert(res.body.indexOf('requests_endpoints{endpoint="undefined"} 1') !== -1);
+
+                    done();
+                });
+            }
+            else
+            {
+                throw new Error('Could not load configuration');
+            }
+        });
+    });
+
+
+    // 7. Kill the previously spawn processes and revert configuration
+    after(function(done)
+    {
+        fake.once('close', function()
+        {
+            proxy.once('close', function()
+            {
+                fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.track');
+                fs.renameSync('./etc/gate.d/gate.json.allstages', './etc/gate.d/gate.json');
+
+                done();
+            });
+
+            proxy.kill();
+        });
+
+        fake.kill();
+    });
+});
+
+
+
+describe('"gate" proxy server, with all stages loaded,', function()
 {
     before(function(done)
     {
