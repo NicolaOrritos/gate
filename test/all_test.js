@@ -20,13 +20,13 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
         fs.renameSync('./etc/gate.d/gate.json.redirection', './etc/gate.d/gate.json');
 
         // 1. Start target fake server
-        fake = cp.fork('test/fakeserver.js')
+        fake = cp.fork('test/fakeserver.js', {silent: true})
         .once('message', function(msg)
         {
             if (msg.started)
             {
                 // 2. Start gate proxy
-                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'])
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
                 .once('message', function(msg)
                 {
                     if (msg.started)
@@ -88,7 +88,7 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
             fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.norootpath');
             fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath', './etc/gate.d/default/pipeline.conf');
 
-            proxy = cp.fork('main.js', ['--conf', './etc/gate.d/']);
+            proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true});
 
             setTimeout(function()
             {
@@ -169,7 +169,7 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
 
 
 // "Substitution" stage doesn't work on its own, it MUST always follow a redirection stage
-describe('"gate" proxy server, with "redirection" + "substitution" stages', function()
+describe('"gate" proxy server, with "redirection" + "substitution" stages,', function()
 {
     before(function(done)
     {
@@ -178,13 +178,13 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages', func
         fs.renameSync('./etc/gate.d/gate.json.substitution', './etc/gate.d/gate.json');
 
         // 1. Start target fake server
-        fake = cp.fork('test/fakeserver.js')
+        fake = cp.fork('test/fakeserver.js', {silent: true})
         .once('message', function(msg)
         {
             if (msg.started)
             {
                 // 2. Start gate proxy
-                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'])
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
                 .once('message', function(msg)
                 {
                     if (msg.started)
@@ -273,13 +273,13 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages', func
         fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
-        fake = cp.fork('test/fakeserver.js')
+        fake = cp.fork('test/fakeserver.js', {silent: true})
         .once('message', function(msg)
         {
             if (msg.started)
             {
                 // 2. Start gate proxy
-                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'])
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
                 .once('message', function(msg)
                 {
                     if (msg.started)
@@ -386,19 +386,102 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages', func
 });
 
 
-
-describe('"gate" proxy server', function()
+// "Substitution" stage doesn't work on its own, it MUST always follow a redirection stage
+describe('"gate" proxy server, with just the "local" stage loaded,', function()
 {
     before(function(done)
     {
+        // 0. For these particular tests we should enable a particular configuration:
+        fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.allstages');
+        fs.renameSync('./etc/gate.d/gate.json.local', './etc/gate.d/gate.json');
+
         // 1. Start target fake server
-        fake = cp.fork('test/fakeserver.js')
+        fake = cp.fork('test/fakeserver.js', {silent: true})
         .once('message', function(msg)
         {
             if (msg.started)
             {
                 // 2. Start gate proxy
-                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'])
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
+                .once('message', function(msg)
+                {
+                    if (msg.started)
+                    {
+                        // 3. Wait services to be up and running before starting tests
+                        done();
+                    }
+                    else
+                    {
+                        throw new Error('Could not start gate server');
+                    }
+                });
+            }
+            else
+            {
+                throw new Error('Could not start fake server');
+            }
+        });
+    });
+
+
+    it('must get files from local filesystem and return their content', function(done)
+    {
+        request.get('http://localhost:9999/subpath2/test_resource.txt', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 200);
+            assert(res.body === 'OK\n');
+
+            done();
+        });
+    });
+
+    it('must return 404 when the files aren\'t found', function(done)
+    {
+        request.get('http://localhost:9999/subpath2/I_m_not_here.txt', function(err, res)
+        {
+            assert(err == null, 'There was an error connecting to the proxy. ' + err);
+            assert(res.statusCode === 404);
+
+            done();
+        });
+    });
+
+
+    // 7. Kill the previously spawn processes and revert configuration
+    after(function(done)
+    {
+        fake.once('close', function()
+        {
+            proxy.once('close', function()
+            {
+                fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.local');
+                fs.renameSync('./etc/gate.d/gate.json.allstages', './etc/gate.d/gate.json');
+
+                done();
+            });
+
+            proxy.kill();
+        });
+
+        fake.kill();
+    });
+});
+
+
+
+describe('"gate" proxy server, all stages enabled', function()
+{
+    before(function(done)
+    {
+        // 1. Start target fake server
+        fake = cp.fork('test/fakeserver.js', {silent: true})
+        .once('message', function(msg)
+        {
+            if (msg.started)
+            {
+                // 2. Start gate proxy
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
                 .once('message', function(msg)
                 {
                     if (msg.started)
@@ -516,13 +599,13 @@ describe('"gate" proxy server', function()
         fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
-        fake = cp.fork('test/fakeserver.js')
+        fake = cp.fork('test/fakeserver.js', {silent: true})
         .once('message', function(msg)
         {
             if (msg.started)
             {
                 // 2. Start gate proxy
-                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'])
+                proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true})
                 .once('message', function(msg)
                 {
                     if (msg.started)
@@ -654,7 +737,7 @@ describe('"gate" proxy server', function()
         // 1. DO NOT start target fake server
 
         // 2. Start gate proxy
-        proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {detached: true});
+        proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true});
 
         // 3. Wait services before starting tests
         setTimeout(function()
