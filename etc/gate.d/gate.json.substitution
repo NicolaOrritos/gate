@@ -10,6 +10,7 @@
         "PATH": "etc/gate.d/default",
         "STEPS":
         [
+            "$BUILTINS/redirection",
             "$BUILTINS/substitution"
         ]
     }
