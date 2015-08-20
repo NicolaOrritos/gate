@@ -1,6 +1,6 @@
 {
   "name": "node-gate",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Translating Reverse Proxy",
   "homepage": "http://github.com/NicolaOrritos/gate",
   "author": {
@@ -16,7 +16,7 @@
     "proxy",
     "node"
   ],
-  "bin": "main.js",
+  "bin": {"gate": "main.js"},
   "dependencies": {
     "bluebird": "^2.9.7",
     "bunyan": "^1.3.3",
