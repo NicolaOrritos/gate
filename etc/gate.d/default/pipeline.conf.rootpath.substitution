@@ -3,9 +3,7 @@
     "STEPS":
     [
         "$BUILTINS/redirection",
-        "$BUILTINS/substitution",
-        "$BUILTINS/local",
-        "$BUILTINS/track"
+        "$BUILTINS/substitution"
     ],
 
     "CONFIGURATION":

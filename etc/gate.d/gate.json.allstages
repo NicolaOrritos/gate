@@ -1,0 +1,9 @@
+
+{
+    "PROXY":
+    {
+        "PORT": 9999
+    },
+
+    "PIPELINE": "etc/gate.d/default"
+}

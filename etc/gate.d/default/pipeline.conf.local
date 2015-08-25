@@ -2,10 +2,7 @@
 {
     "STEPS":
     [
-        "$BUILTINS/redirection",
-        "$BUILTINS/substitution",
-        "$BUILTINS/local",
-        "$BUILTINS/track"
+        "$BUILTINS/local"
     ],
 
     "CONFIGURATION":
@@ -14,53 +11,24 @@
         {
             "TARGETS":
             {
-                "/":
-                {
-                    "HOST":   "localhost",
-                    "PORT":   5050,
-                    "SECURE": false
-                },
-
                 "/subpath1":
                 {
                     "HOST":   "localhost",
                     "PORT":   5050,
                     "SECURE": false
                 }
+            },
+
+            "ERRORS":
+            {
+                "TOLERANT": true
             }
         },
-
 
         "substitution":
         {
             "TARGETS":
             {
-                "/":
-                {
-                    "TRANSLATION":
-                    {
-                        "INGOING":
-                        [
-                            {
-                                "FROM": "subpathXYZ",
-                                "TO":   "ZYXsubpath"
-                            }
-                        ],
-
-                        "OUTGOING":
-                        [],
-
-                        "REPLACE_RULES":
-                        [
-                            {
-                                "FROM":          ".",
-                                "TO":            "_",
-                                "ONLY_APPLY_TO": "%3"
-                            }
-                        ]
-                    }
-                },
-
                 "/subpath1":
                 {
                     "TRANSLATION":
@@ -86,6 +54,11 @@
                         ]
                     }
                 }
+            },
+
+            "ERRORS":
+            {
+                "TOLERANT": true
             }
         },
 
@@ -95,7 +68,7 @@
             {
                 "/subpath2":
                 {
-                    "FOLDER":   "test/resources"
+                    "FOLDER":   "test"
                 }
             },
 
