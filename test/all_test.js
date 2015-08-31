@@ -16,8 +16,8 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
     before(function(done)
     {
         // 0. For these particular tests we should enable a particular configuration:
-        fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.allstages');
-        fs.renameSync('./etc/gate.d/gate.json.redirection', './etc/gate.d/gate.json');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.allstages');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.redirection', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
         fake = cp.fork('test/fakeserver.js', {silent: true})
@@ -85,8 +85,8 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
     {
         proxy.once('close', function()
         {
-            fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.norootpath');
-            fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath', './etc/gate.d/default/pipeline.conf');
+            fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.norootpath.redirection');
+            fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath.redirection', './etc/gate.d/default/pipeline.conf');
 
             proxy = cp.fork('main.js', ['--conf', './etc/gate.d/'], {silent: true});
 
@@ -140,8 +140,8 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
     it('must re-enable old configuration [root-path]', function(done)
     {
         // 6. Re-enable the old configuration:
-        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.rootpath');
-        fs.renameSync('./etc/gate.d/default/pipeline.conf.norootpath', './etc/gate.d/default/pipeline.conf');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.rootpath.redirection');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.norootpath.redirection', './etc/gate.d/default/pipeline.conf');
 
         done();
     });
@@ -154,8 +154,8 @@ describe('"gate" proxy server, with just the "redirection" stage loaded,', funct
         {
             proxy.once('close', function()
             {
-                fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.redirection');
-                fs.renameSync('./etc/gate.d/gate.json.allstages', './etc/gate.d/gate.json');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.redirection');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf.allstages', './etc/gate.d/default/pipeline.conf');
 
                 done();
             });
@@ -174,8 +174,8 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages,', fun
     before(function(done)
     {
         // 0. For these particular tests we should enable a particular configuration:
-        fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.allstages');
-        fs.renameSync('./etc/gate.d/gate.json.substitution', './etc/gate.d/gate.json');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.allstages');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.substitution', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
         fake = cp.fork('test/fakeserver.js', {silent: true})
@@ -269,8 +269,8 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages,', fun
         proxy.kill();
 
         // 0. For these particular tests we should enable a particular configuration:
-        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.norootpath');
-        fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath', './etc/gate.d/default/pipeline.conf');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.norootpath.substitution');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.rootpath.substitution', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
         fake = cp.fork('test/fakeserver.js', {silent: true})
@@ -358,8 +358,8 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages,', fun
     it('must re-enable old configuration [root-path]', function(done)
     {
         // 6. Re-enable the old configuration:
-        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.rootpath');
-        fs.renameSync('./etc/gate.d/default/pipeline.conf.norootpath', './etc/gate.d/default/pipeline.conf');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.rootpath.substitution');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.norootpath.substitution', './etc/gate.d/default/pipeline.conf');
 
         done();
     });
@@ -372,8 +372,8 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages,', fun
         {
             proxy.once('close', function()
             {
-                fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.substitution');
-                fs.renameSync('./etc/gate.d/gate.json.allstages', './etc/gate.d/gate.json');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.substitution');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf.allstages', './etc/gate.d/default/pipeline.conf');
 
                 done();
             });
@@ -386,14 +386,13 @@ describe('"gate" proxy server, with "redirection" + "substitution" stages,', fun
 });
 
 
-// "Substitution" stage doesn't work on its own, it MUST always follow a redirection stage
 describe('"gate" proxy server, with just the "local" stage loaded,', function()
 {
     before(function(done)
     {
         // 0. For these particular tests we should enable a particular configuration:
-        fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.allstages');
-        fs.renameSync('./etc/gate.d/gate.json.local', './etc/gate.d/gate.json');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.allstages');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.local', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
         fake = cp.fork('test/fakeserver.js', {silent: true})
@@ -455,8 +454,8 @@ describe('"gate" proxy server, with just the "local" stage loaded,', function()
         {
             proxy.once('close', function()
             {
-                fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.local');
-                fs.renameSync('./etc/gate.d/gate.json.allstages', './etc/gate.d/gate.json');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.local');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf.allstages', './etc/gate.d/default/pipeline.conf');
 
                 done();
             });
@@ -474,8 +473,8 @@ describe('"gate" proxy server, with just the "track" stage loaded,', function()
     before(function(done)
     {
         // 0. For these particular tests we should enable a particular configuration:
-        fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.allstages');
-        fs.renameSync('./etc/gate.d/gate.json.track', './etc/gate.d/gate.json');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.allstages');
+        fs.renameSync('./etc/gate.d/default/pipeline.conf.track', './etc/gate.d/default/pipeline.conf');
 
         // 1. Start target fake server
         fake = cp.fork('test/fakeserver.js', {silent: true})
@@ -526,9 +525,9 @@ describe('"gate" proxy server, with just the "track" stage loaded,', function()
         sjl('etc/gate.d/default/pipeline.conf', {}, {silent: true})
         .then(function(conf)
         {
-            if (conf && conf.track && conf.track.METRICS_PORT)
+            if (conf && conf.CONFIGURATION && conf.CONFIGURATION.track && conf.CONFIGURATION.track.METRICS_PORT)
             {
-                var port = conf.track.METRICS_PORT;
+                var port = conf.CONFIGURATION.track.METRICS_PORT;
 
                 request.get('http://localhost:' + port + '/metrics', function(err, res)
                 {
@@ -558,8 +557,8 @@ describe('"gate" proxy server, with just the "track" stage loaded,', function()
         {
             proxy.once('close', function()
             {
-                fs.renameSync('./etc/gate.d/gate.json', './etc/gate.d/gate.json.track');
-                fs.renameSync('./etc/gate.d/gate.json.allstages', './etc/gate.d/gate.json');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf', './etc/gate.d/default/pipeline.conf.track');
+                fs.renameSync('./etc/gate.d/default/pipeline.conf.allstages', './etc/gate.d/default/pipeline.conf');
 
                 done();
             });
