@@ -2,8 +2,6 @@
 
 'use strict';
 
-var Logger   = require('bunyan');
-var progenic = require('progenic');
 var docopt   = require('docopt').docopt;
 
 
@@ -20,18 +18,6 @@ var options = 'Start the Gate server \n'
             + '  -h --help                 Shows this help \n';
 
 
-var log = new Logger(
-{
-    name: 'gate',
-
-    streams:
-    [
-        {
-            stream: process.stdout,
-            level: 'debug'
-        }
-    ]
-});
 
 var cmd = docopt(options);
 
@@ -39,5 +25,5 @@ if (cmd)
 {
     process.env.CONF_PATH = cmd['--conf'] || DEFAULT_CONF_DIR;
 
-    progenic.run('gate', 'lib/gate', 1, true, log);
+    require('./lib/gate');
 }
