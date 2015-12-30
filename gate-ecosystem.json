@@ -1,0 +1,28 @@
+
+{
+    "apps":
+    [
+        {
+            "name": "gate",
+            "script": "main.js",
+            "args": ["--conf", "/etc"],
+            "instances": 8,
+            "watch": false,
+            "merge_logs": false,
+            "cwd": ".",
+            "env":
+            {
+                "NODE_ENV": "development"
+            },
+            "env_production":
+            {
+                "NODE_ENV": "production"
+            },
+            "env_staging":
+            {
+                "NODE_ENV": "staging",
+                "TEST": true
+            }
+        }
+    ]
+}
