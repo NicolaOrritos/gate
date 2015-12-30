@@ -2,7 +2,15 @@
 
 'use strict';
 
-var docopt   = require('docopt').docopt;
+var log     = require('./lib/log.js');
+var blocked = require('blocked');
+var docopt  = require('docopt').docopt;
+
+
+blocked(function(ms)
+{
+    log.warn('Event-loop blocked for %sms', (ms | 0));
+});
 
 
 var DEFAULT_CONF_DIR = '.';
